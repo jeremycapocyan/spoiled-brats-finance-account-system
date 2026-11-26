@@ -2,6 +2,8 @@
 
 A Next.js application for a single kiosk, built for PHP and Asia/Manila. Real business records start blank. The separate **Explore sample workspace** uses clearly labeled fictional browser-only records.
 
+Production: https://spoiled-brats-finance-account-syste.vercel.app/. A dedicated Supabase database and Production environment are configured; the approved owner completes access through the invitation email. See [DEPLOYMENT.md](DEPLOYMENT.md) for current verification status.
+
 ## Run
 
 Use Node.js 24 and npm.

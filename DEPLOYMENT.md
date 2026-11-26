@@ -66,4 +66,12 @@ Monitor Vercel function errors, Supabase database/storage usage, PIN failure rat
 
 ## Current delivery status
 
-Source, database migration, production build, automated tests, sample data, PDF fixtures, and local browser QA are supplied. No Supabase/Vercel connection or project credentials were available during implementation, so production database provisioning and internet deployment remain pending. Connect the Vercel and Supabase integrations to complete them.
+Production application: https://spoiled-brats-finance-account-syste.vercel.app/
+
+The Vercel project `spoiled-brats-finance-account-system` is deployed under Coach Jeremy. A separate Supabase project, `spoiled-brats-db` (`ldvyipqyqtebvzgblhir`, Tokyo), contains the applied coffee shop schema. Gardens is unchanged.
+
+All five application environment variables are configured in Vercel Production. The Supabase URL and publishable key are browser-safe configuration; the server key and attendance rate-limit secret are private Production secrets. No private values are committed to this repository. `APP_URL` uses the production application origin above.
+
+Supabase's default Site URL and allowed account redirect point to the production `/account` page, so invitations and recovery links can open password setup. The approved owner invitation was sent and the matching profile has active administrator access. Additional accounts are not seeded.
+
+Verified on November 27, 2026: the latest configured production deployment is Ready; one empty finance workspace exists; sales, expenses, stock items, and employee records start empty; every app table has row-level security; the anonymous database role has no SELECT privilege on the finance table. The initial source passed 28 automated tests and the production build. Full signed-in application verification remains pending the owner's acceptance of the invitation and private password setup.
