@@ -1,6 +1,7 @@
 import { authorize, fail, jsonBody } from "@/lib/server";
 import { validDate } from "@/lib/finance";
 import { today } from "@/lib/model";
+import { requireOwner } from "@/lib/permissions";
 export async function GET(request: Request) {
   try {
     const { db, profile } = await authorize(request); const query = new URL(request.url).searchParams;
@@ -36,6 +37,7 @@ export async function POST(request: Request) {
       const { error } = await db.from("shop_attendance_pins").delete().eq("employee_id", record.id); if (error) throw error;
       await db.from("shop_audit").insert({ actor: profile.id, action: "attendance:revoke-pin", after_data: { employee_id: record.id } });
     } else if (action === "invite") {
+      requireOwner(profile);
       const { data: employee } = await db.from("shop_employees").select("*").eq("id", record.id).single();
       if (!employee?.active) throw new Error("Select an active employee.");
       if (employee.user_id) throw new Error("This employee already has an account. They can use Forgot password on the sign-in screen.");
@@ -44,8 +46,8 @@ export async function POST(request: Request) {
       if (invitation.error || !invitation.data.user) throw new Error(invitation.error?.message || "Invitation failed.");
       const userId = invitation.data.user.id;
       const existing = await db.from("shop_profiles").select("role").eq("id", userId).maybeSingle();
-      if (existing.data?.role === "admin") throw new Error("An administrator account cannot be linked as an employee.");
-      const result = await db.from("shop_profiles").upsert({ id: userId, name: employee.name, role: "employee", active: true }); if (result.error) throw result.error;
+      if (existing.data) throw new Error("This person already has a user account. Link it in the employee form without changing its role.");
+      const result = await db.rpc("shop_manage_account", { p_actor: profile.id, p_target: userId, p_name: employee.name, p_role: "employee", p_active: true, p_email: employee.email }); if (result.error) throw result.error;
       const linked = await db.from("shop_employees").update({ user_id: userId }).eq("id", employee.id); if (linked.error) throw linked.error;
       await db.from("shop_audit").insert({ actor: profile.id, action: "employee:invite", after_data: { employee_id: employee.id } });
     } else throw new Error("Unknown team action.");

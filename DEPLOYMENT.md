@@ -23,6 +23,10 @@ values ('YOUR_AUTH_USER_UUID','Jeremy','admin',true);
 
 No public signup grants access. Additional administrators can be provisioned deliberately using the same process. Employees are registered in the app and then invited from the employee register; they choose their own passwords. Do not create fictional live employees for testing.
 
+### Branding, roles and POS upgrade
+
+For an existing installation, run `supabase/migrations/202611270002_brand_users_pos.sql` once before deploying this version. It preserves all finance and attendance records, adds account roles, POS receipts and private display sessions. It marks the existing active administrator as owner only when there is exactly one. With multiple administrators, explicitly select the approved owner in SQL; never guess. For a new installation, bootstrap the owner above before running this second migration. After upgrading, the owner manages invitations and roles in **Users & roles**. No new environment variables or external services are required. Customer devices need internet access to the same HTTPS deployment.
+
 ## 3. Configure environment
 
 Copy `.env.example` to private `.env.local` and set:

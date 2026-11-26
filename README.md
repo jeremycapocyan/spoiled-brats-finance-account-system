@@ -32,11 +32,22 @@ This workspace includes its own ignored development dependencies. The source arc
 4. Inventory: create ingredients/packaging and packaged stock items. Use grams, milliliters, and pieces as base units. A 1 kg bag contains 1,000 g; a case of 24 bottles contains 24 pieces.
 5. Stock levels -> Opening stock / adjustment: record the quantities already owned and their total purchase costs. This does not record a new cash payment. For newly bought stock, use **Stock purchase** instead.
 6. Create menu products and selling prices. Link each packaged product to its stock item. Add one coffee recipe per flavor/size, including ingredients, cup, lid, and other tracked packaging.
-7. Enter daily product quantities, actual sales after discounts, and payment splits. Stock is deducted automatically when saving. Edit the existing sheet to correct it; one sheet is allowed per date.
+7. Use **Open POS** for individual paid orders, or enter daily product quantities and payment splits manually. Stock is deducted automatically. One sales sheet is allowed per date. Days containing POS receipts are locked against manual sales edits and backup replacement to protect paid receipts.
 8. Record operating expenses, wastage, and complimentary usage. Reconcile closing account balances. Use Financial reports for date-filtered PDFs; Settings for CSV and finance backups.
 9. Time tracker: register employees and schedules, send invitations when ready, and download the kiosk QR. Employees choose their own password and private six-digit PIN. Scanning alone never punches attendance.
 
 Examples appear in Settings and placeholders. Real menu names, ingredient quantities, balances, staff, and transactions are never preloaded.
+
+## Café branding, users, and POS
+
+The supplied Spoiled Brats Café logo is preserved in `public/brand/logo-original.png`. Charcoal and pale yellow set the palette; local, openly licensed Lobster Two headings echo the script lettering. The original logo font has not been identified. Its original lettering remains in the image, while forms and figures use a readable sans serif.
+
+- **Users & roles:** the owner invites people by email, assigns Administrator, Cashier, Finance Viewer, or Employee access, and can disable accounts. Owner access is protected. Administrators manage finance, inventory and attendance; cashiers use POS and their recent receipts; viewers can read finance/inventory and export financial PDFs; employees see their linked attendance. Creating an employee record with the same email links it to the invited account. No role is assigned from browser metadata or public signup.
+- **POS:** `/pos` uses the live menu, current prices and recipes. Confirm payment only after receiving funds; the application does not process payments. Cash, GCash and Bank can be split, with cash tender/change. A paid checkout validates combined ingredient usage and atomically saves the daily sales totals, inventory effects, immutable receipt and audit entry. Retries reuse the checkout identifier. An unresolved network failure should be retried before starting another order; check Recent receipts if uncertain. Receipts can be printed and are management receipts, not tax invoices. Refunds, discounts, receipt voids and payment processing are outside this sample's scope; resolve a mistaken live receipt with the owner before making any ledger correction.
+- **Sample POS:** `/pos?sample=1` uses the same browser-only sample workspace as `/?sample=1`. Paid sample orders update its fictional income and stock, never live records. Recent sample receipts are separate browser records. Resetting the sample tracker also clears its POS/user examples.
+- **Customer display:** from POS, use **Customer display → Open customer window** for a second monitor. Move the window to that monitor and select full screen. For a tablet/phone, choose **Create display link** and scan the QR. A signed-in cashier/admin can also pair a sample display. Links use a random capability in the URL fragment, expire after eight hours, and can be disconnected. Pairing again revokes the previous device link. Keep the link at the counter. The server stores only its hash and a whitelisted order snapshot; no staff details, costs, credentials or finance data appear on the display. Updates arrive approximately every two seconds; stale orders clear after 90 seconds. Keep the cashier POS open. Reopening the customer window reconnects it to the current cashier session.
+
+The custom POS is connected to this tracker. Loyverse synchronization has not been added; do not enter the same sale in the daily sheet a second time.
 
 ## Calculation rules
 
@@ -65,7 +76,7 @@ Close and reconcile every trading day. Count high-use ingredients frequently and
 
 ## Boundaries
 
-Single kiosk; fully paid sales and purchases; owner/admin finance entry; employee-only attendance access. No food recipes, supplier/customer credit, tax filing, payroll, statutory calculations, bank/GCash integrations, or payment transfers. All payment entries are manual records of money already paid or received.
+Single kiosk; fully paid sales and purchases; owner/admin finance entry with cashier POS and read-only finance roles; employee attendance access. No food recipes, supplier/customer credit, tax filing, payroll, statutory calculations, bank/GCash integrations, or payment transfers. All payment entries are records of money already paid or received.
 
 ## Validation
 

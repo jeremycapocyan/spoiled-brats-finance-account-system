@@ -3,6 +3,7 @@ import { ledger, validDate, validateState } from "@/lib/finance";
 import { financialPdf, timesheetPdf } from "@/lib/pdf";
 import type { Attendance, Employee } from "@/lib/model";
 import type { Schedule } from "@/lib/attendance";
+import { canReadFinance } from "@/lib/permissions";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   try {
@@ -31,7 +32,7 @@ export async function POST(request: Request) {
     } else {
       let state;
       if (body.sample === true) { state = body.state; validateState(state); ledger(state); }
-      else { const { db } = await authorize(request, true); state = (await loadFinance(db)).state; }
+      else { const { db, profile } = await authorize(request); if (!canReadFinance(profile)) throw new Error("Finance access is required."); state = (await loadFinance(db)).state; }
       bytes = await financialPdf(state, start, end, body.sample === true);
     }
     return new Response(Buffer.from(bytes), { headers: { "Content-Type": "application/pdf", "Content-Disposition": `attachment; filename="${body.sample ? "sample-" : ""}${body.kind === "timesheet" ? "timesheet" : "financial-report"}-${start}-${end}.pdf"`, "Cache-Control": "no-store" } });
