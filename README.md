@@ -40,6 +40,12 @@ Examples appear in Settings and placeholders. Real menu names, ingredient quanti
 
 ## Café branding, users, and POS
 
+### Install on Android, iPad, or PC
+
+Open `/install` for device-specific steps. The app has a branded manifest, PNG icons and standalone window mode; it launches directly into `/pos`. Android uses Chrome's Install action, iPad uses Safari's Share → Add to Home Screen (Open as Web App), and Windows supports Chrome/Edge installation. The in-app Install button opens the browser's native prompt when available and otherwise shows manual steps. Installation is optional and does not change account permissions. Devices share the existing Supabase records after signing in.
+
+Use either tablet as the cashier, then open its paired customer display link on the PC's second monitor. Keep the cashier app open during service. Live sales and cross-device display updates require internet. A connection banner appears when offline and live payment confirmation is disabled; no offline sales are queued and no financial APIs are stored in a service-worker cache. Sample data remains browser-local, so samples on different devices are separate. Installation and tablet acceptance must be completed on the actual devices by their owner.
+
 The supplied Spoiled Brats Café logo is preserved in `public/brand/logo-original.png`. Charcoal and pale yellow set the palette; local, openly licensed Lobster Two headings echo the script lettering. The original logo font has not been identified. Its original lettering remains in the image, while forms and figures use a readable sans serif.
 
 - **Users & roles:** the owner invites people by email, assigns Administrator, Cashier, Finance Viewer, or Employee access, and can disable accounts. Owner access is protected. Administrators manage finance, inventory and attendance; cashiers use POS and their recent receipts; viewers can read finance/inventory and export financial PDFs; employees see their linked attendance. Creating an employee record with the same email links it to the invited account. No role is assigned from browser metadata or public signup.

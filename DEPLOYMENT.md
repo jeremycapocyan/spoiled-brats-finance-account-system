@@ -70,6 +70,8 @@ Monitor Vercel function errors, Supabase database/storage usage, PIN failure rat
 
 ## Current delivery status
 
+The installable web app adds `/install`, `/manifest.webmanifest`, branded 180/192/512-pixel icons, and standalone launch into `/pos`. It supports Android Chrome, iPad Safari, and Windows Chrome/Edge installation without new database changes or environment variables. The installation guide and icon rendering were checked locally, and TypeScript and the production build pass. Actual home-screen installation must be completed on the owner's tablets. Live sales and cross-device display updates require internet; live payment confirmation is disabled while the browser reports offline, and no offline payments are queued.
+
 Production application: https://spoiled-brats-finance-account-syste.vercel.app/
 
 The Vercel project `spoiled-brats-finance-account-system` is deployed under Coach Jeremy. A separate Supabase project, `spoiled-brats-db` (`ldvyipqyqtebvzgblhir`, Tokyo), contains the applied coffee shop schema. Gardens is unchanged.
